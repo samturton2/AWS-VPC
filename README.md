@@ -23,7 +23,7 @@ Follow the instructions to set up your own VPC, with subnets to allow for a publ
 ### Route table
 - Two route tables must be created (A private and public one)
 - Then edit routes
- - both must have access to the local and internet gateway we created on port 0.0.0.0/0
+ - both must have access to the local and the public route should have internet gateway we created on port 0.0.0.0/0
 
 ![](img/editroutes.png)
 - Subnet association
@@ -34,15 +34,16 @@ Follow the instructions to set up your own VPC, with subnets to allow for a publ
 - Associate them with the corresponding subnet once created
 ![](img/networkacl.png)
 - Once created we need to set inbound and outbound rules
+- We need to allow in and out of the internet ports
+- We need to be able to SSH in from our IP, and dont mind if we SSH anywhere from the public environment
+- We want the ephemeral ports open in and out.
 
 ![](img/networkacl-inboundrules.png)
 ![](img/networkacl-outboundrules.png)
 
 - Repeat this process to create a private subnet ACL. (Keeping everything the same as public, untill we have got the app running, then change the permissions to:)
-  - Allow it public subnet to ssh in
+  - Allow the public subnet to ssh in
   - Allow the pub subnet to inbound in your db port 27017
-  - Only allow the ephemeral ports open to your public subnet
-  - Only allow any outbound traffic to http and https, dont allow any inbound http / https traffic.
   - Finally temporarily allow it to ssh in from our own IP, so we can set up the environment. Once complete we need to remove this setting.
 
 ## EC2 instance
@@ -51,11 +52,14 @@ Follow the instructions to set up your own VPC, with subnets to allow for a publ
 
 ![](img/ec2step3.png)
 
-- create a Security group for each of the EC2 instances with the following settings.
+- create a Security group for each of the EC2 instances with the following settings. The Bastion EC2 will be used to go into so we can SSH into our db instance for added security. Keep the outbound rules as all traffic open.
+- App public subnet EC2 instance security settings
+![](img/SG-app.png)
+- Bastion public subnet EC2 instance security settings
+![](img/SG-bastion.png)
 
-![App public EC2 instance](img/SG-app.png)
-
-![DB private EC2 instance](img/SG-db.png)
+- DB private subnet EC2 instance security settings
+![](img/SG-db.png)
 
 - Once reviewed and launched, we can scp the relevant files into the VM's then ssh into our VM's running the provision files.
 - Make sure the DB_HOST variable is changed to our public IP of the DB EC2 instance.

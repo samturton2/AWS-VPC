@@ -1,7 +1,7 @@
 # AWS - Virtual Private Cloud
 A VPC is a public cloud offering that lets an enterprise establish its own private cloud-like computing environment on shared public cloud infrastructure. A VPC gives an enterprise the ability to define and control a virtual network that is logically isolated from all other public cloud tenants, creating a private, secure place on the public cloud.
 
-- This is a diagram to show how the VPC is set up with the routes table the ACL's and the Internet Gateway. It also shows the acceptance criteria for our app and DB instance.
+- This is a diagram to show how the VPC is set up with the routes table the ACL's and the Internet Gateway. It also shows where the db, app and bastion ec2 instances are positioned in our VPC.
 
 ![](img/diagram.png)
 

@@ -37,17 +37,15 @@ echo "export DB_HOST=137.20.2.96" >> ~/.bashrc
 # source rereads the file, shouldn't need it but it is in here just in case
 source ~/.bashrc
 
-# go to app and install npm
+# go to app install npm and pm2 start
 cd /home/ubuntu/app
+sudo npm install
 pm2 start app.js --update-env
 # Dont need to set the port as the mogodb is assigned to 0.0.0.0 so it listens across all ports
 
 # copy the synced reverse proxy configuration file to the sites available folder
-sudo cp /home/ubuntu/app/reverse-proxy.conf /etc/nginx/conf.d/reverse-proxy.conf
-# disable the default virtual host
-sudo unlink /etc/nginx/sites-enabled/default
+sudo cp /home/ubuntu/app/reverse-proxy.conf /etc/nginx/sites-available/reverse-proxy.conf
 # link the new proxy, setting it as default
-sudo ln -s /etc/nginx/conf.d/reverse-proxy.conf /etc/nginx/sites-enabled/reverse-proxy.conf
-sudo rm -rf /etc/nginx/sites-enabled/default
+sudo ln -s /etc/nginx/conf.d/reverse-proxy.conf /etc/nginx/sites-enabled/default
 # finally, restart the nginx service so the new config takes hold
 sudo systemctl restart nginx
